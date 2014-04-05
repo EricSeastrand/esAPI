@@ -1,0 +1,183 @@
+{
+	"Message_Get" : {
+		"select" : "Message",
+		"fields" : [
+			"Message.message_id",
+			"Message.content",
+			"Message.user_id",
+			"User.name",
+			"unix_timestamp(Message.timestamp) as Message.time"
+		],
+		"join": {
+			"Message.user_id" : "User.user_id"
+		},
+		"where" : {
+			"Message.convo_id": "_convoId"
+		}
+	},
+	"Message_GetNew" : {
+		"select" : "Message",
+		"fields" : [
+			"Message.message_id",
+			"Message.content",
+			"Message.user_id",
+			"User.name",
+			"unix_timestamp(Message.timestamp) as Message.time"
+		],
+		"join": {
+			"Message.user_id" : "User.user_id"
+		},
+		"where" : {
+			"Message.convo_id": "_convoId",
+			"Message.message_id": ">messageId"
+		}
+	},
+	"Message_Send": {
+		"insert": {
+			"Message.user_id"  : "+userId",
+			"Message.content"  : "_content",
+			"Message.convo_id" : "_convoId"
+		}
+	},
+
+	"Convo_Get" : {
+		"select" : "Convo",
+		"fields" : [
+			"Convo.convo_id",
+			"Convo.is_live"
+		],
+		"join": {},
+		"where" : {}
+	},
+"User_Get" : {
+		"select" : "User",
+		"fields" : [
+			"User.user_id",
+			"User.name",
+			"User.activity_timestamp"
+		],
+		"join": {},
+		"where" : {}
+	},
+
+"User_Create": {
+		"insert": {
+			"User.name"  : "_username"
+		}
+	},
+	"Room_Get": {
+		"select": "Room",
+		"fields": [
+			"Event.Name",
+			"Event.Time_Start",
+			"Event.Time_End",
+			"Event.MOTD",
+			"Location.Name",
+			"Location.Address_Street",
+			"Location.Address_Zip",
+			"Location.Address_City",
+			"Location.Address_State",
+			"Location.Website",
+			"Location.GoogleMapsID"
+		],
+		"join": {
+			"Location.ID": "Event.ID"
+		},
+		"where" : {
+			"Event.ID": "_eventId"
+		}
+	},
+	"Event_Organizer_Get": {
+		"select": "Event_Organizer",
+		"fields": [
+			"Event.Name",
+			"Person.ID",
+			"Person.Email",
+			"Person.Name_First",
+			"Person.Name_Last"
+		],
+		"where" : {
+			"Event.ID": "_eventId"
+		}
+	},
+	"Performer_Get": {
+		"select": "Performer",
+		"fields": [
+			"Performer.Name",
+			"Performer.ID",
+			"Person.ID",
+			"Person.Name_First",
+			"Person.Name_Last",
+			"Performer.URL_Facebook"
+		],
+		"join": {
+			"Performer.Person_ID": "Person.ID"
+		},
+		"where" : {
+			"Performer.ID": "_performerId"
+		}
+	},
+	"Performer_Create": {
+		"insert": {
+			"Performer.Person_ID" : "_personId",
+			"Performer.Name"      : "_performerName",
+			"Performer.URL_Facebook": "&facebookUrl"
+		}
+	},
+	"Person_Create": {
+		"insert": {
+			"Person.Name_First" : "_nameFirst",
+			"Person.Name_First" : "_nameLast"
+		}
+	},
+	"Event_TimeSlot_Create": {
+		"insert": {
+			"Event_TimeSlot.Performer_ID"   : "&performerId",
+			"Event_TimeSlot.Event_Stage_ID" : "&stageId",
+			"Event_TimeSlot.Event_ID"       : "_eventId",
+			"Event_TimeSlot.Time_Start"     : "_start",
+			"Event_TimeSlot.Time_End"       : "_end"
+		}
+	},
+	"Event_TimeSlot_DeleteAll": {
+		"delete": "Event_TimeSlot",
+		"where" : {
+			"Event_TimeSlot.Event_ID": "_eventId",
+			"Event_TimeSlot.Event_Stage_ID": "_stageId"
+		}
+	},
+	"Event_TimeSlot_Get": {
+		"select": "Event_TimeSlot",
+		"fields": [
+			"Event_TimeSlot.ID",
+			"Event_TimeSlot.Time_Start",
+			"Event_TimeSlot.Time_End",
+			"Event_TimeSlot.Performer_ID",
+			"Event_Stage.Name",
+			"Performer.Name",
+			"Performer.URL_Facebook",
+			"Performer.URL_Soundcloud"
+			
+		],
+		"join": {
+			"Event_TimeSlot.Performer_ID"    : "Performer.ID",
+			"Event_TimeSlot.Event_Stage_ID"  : "Event_Stage.ID"
+		},
+		"where" : {
+			"Event_TimeSlot.Event_ID": "_eventId",
+			"Event_TimeSlot.Event_Stage_ID": "_stageId"
+		}
+	},
+	"Event_Stage_Get": {
+		"select": "Event_Stage",
+		"fields": [
+			"Event_Stage.Name",
+			"Event_Stage.ID",
+			"Event_Stage.Event_ID"
+		],
+		"where": {
+			"Event_Stage.ID": "_stageId",
+			"Event_Stage.Event_ID": "_eventId"
+		}
+	}
+}
