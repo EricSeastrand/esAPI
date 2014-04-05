@@ -49,16 +49,44 @@
 		"join": {},
 		"where" : {}
 	},
-"User_Get" : {
+	"User_Get" : {
 		"select" : "User",
 		"fields" : [
 			"User.user_id",
 			"User.name",
-			"User.activity_timestamp"
+			"User.activity_timestamp",
+			"User.lat",
+			"User.lng"
 		],
 		"join": {},
 		"where" : {}
 	},
+
+	"User_Me" : {
+		"select" : "User",
+		"fields" : [
+			"User.user_id",
+			"User.name",
+			"User.activity_timestamp",
+			"User.lat",
+			"User.lng"
+		],
+		"join": {},
+		"where" : {
+			"User.user_id" : "+userId"
+		}
+	},
+	"User_Location_Update": {
+		"update": "User",
+		"set" : {
+			"User.lat": "_lattitude",
+			"User.lng": "_longitude"
+		},
+		"where": {
+			"User.user_id": "+userId"
+		}
+	},
+
 
 "User_Create": {
 		"insert": {

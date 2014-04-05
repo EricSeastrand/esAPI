@@ -130,7 +130,42 @@ INSERT INTO Message ( user_id, content, convo_id ) VALUES ( ?, ?, ? )
 
 #### *UPDATE* routes modify row(s) in the database, and return the number of rows modified
 
-*This section coming soon!*
+##### HTTP Request
+> esAPI/?action=User_Location_Update&lattitude=29.901761299999997&longitude=-95.58800199999999
+
+##### Response
+```json
+{"ok":true,"result":1}
+```
+
+##### MySQL Query that esAPI prepares dynamically
+```sql
+UPDATE  User SET  User.lat=?, User.lng=? WHERE  User.user_id = ?
+```
+
+##### Placeholder Values
+*The value of $_GET['lattitude'] and $_GET['longitude'], as well as $_SESSION['userId'],are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.*
+```php
+[placeholderValues] => Array (
+	[0] => 29.901764999999997
+	[1] => -95.5879586
+	[2] => 45
+)
+```
+
+##### How to define this route in routes.json
+```json
+"User_Location_Update": {
+	"update": "User",
+	"set" : {
+		"User.lat": "_lattitude",
+		"User.lng": "_longitude"
+	},
+	"where": {
+		"User.user_id": "+userId"
+	}
+}
+```
 
 ---
 
