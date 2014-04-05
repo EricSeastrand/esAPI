@@ -7,6 +7,8 @@ require_once(ESDB_LIBPATH . '/esDB_Query.class.php');
 require_once(ESDB_LIBPATH . '/esDB_Query_Select.class.php');
 require_once(ESDB_LIBPATH . '/esDB_Query_Insert.class.php');
 require_once(ESDB_LIBPATH . '/esDB_Query_Delete.class.php');
+require_once(ESDB_LIBPATH . '/esDB_Query_Update.class.php');
+
 
 class esDB {
 	const DEBUG = true;
@@ -42,6 +44,14 @@ class esDB {
 		$result = $this->core->Execute( $this->queryObject );
 		
 		return $result;
+	}
+
+	function Update( $table, $newValues, $where ) {
+		$this->queryObject = new esDB_Query_Update( $table, $newValues, $where );
+		$this->queryObject->buildQuery();
+
+		return $this->core->Execute( $this->queryObject );
+
 	}
 	
 }

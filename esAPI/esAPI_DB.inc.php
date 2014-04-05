@@ -36,6 +36,8 @@ class esAPI_DB extends esAPI {
 			return $this->_handle_Insert( $route, $params );
 		if( @$route['delete'] )
 			return $this->_handle_Delete( $route, $params );
+		if( @$route['update'] )
+			return $this->_handle_Update( $route, $params );
 	}
 	
 	function _handle_Delete( $route, $params ) {
@@ -57,6 +59,14 @@ class esAPI_DB extends esAPI {
 			$filters = array();
 
 		return $this->esDB->Select( $route['select'], $route['fields'], $filters, @$route['join'] );
+	}
+
+	function _handle_Update( $route, $params ) {
+		$where = $this->_substituteValues( $route['where'], $params, true );
+		$updates = $this->_substituteValues( $route['set'], $params, true );
+
+
+		return $this->esDB->Update( $route['update'], $where, $updates );
 	}
 	
 	function _substituteValues( $substituteInto, $values, $requireAllFields=false ) {
