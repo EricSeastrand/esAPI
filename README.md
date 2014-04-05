@@ -22,15 +22,15 @@ Examples
 
 ### SELECT routes fetch specific fields/columns from your database.
 
-#### HTTP Request:
+##### HTTP Request:
 > /esAPI/?action=Message_GetNew&messageId=150&convoId=3
 
-#### Response:
+##### Response:
 ```json
 {"ok":true,"result":[{"Message.message_id":159,"Message.content":"Anyone in here?","Message.user_id":40,"User.name":"Gohan","Message.time":1396279063}]}
 ```
 
-#### How to define this route in routes.json:
+##### How to define this route in routes.json:
 ```json
 "Message_GetNew" : {
 	"select" : "Message",
@@ -51,7 +51,7 @@ Examples
 }
 ```
 
-#### MySQL Query that esAPI prepares dynamically:
+##### MySQL Query that esAPI prepares dynamically:
 ```sql
 SELECT
 	Message.message_id, Message.content, Message.user_id,
@@ -61,7 +61,7 @@ FROM Message
 WHERE Message.convo_id = ? AND Message.message_id > ?
 ```
 
-#### The values submitted for 'convoId' and 'messageId' are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.
+##### The values submitted for 'convoId' and 'messageId' are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.
 ```php
 [placeholderValues] => Array (
 	[0] => 3
@@ -72,50 +72,59 @@ WHERE Message.convo_id = ? AND Message.message_id > ?
 
 ### INSERT routes create new rows in the database.
 	
-	HTTP Request:
-		esAPI/?action=Message_Send&userId=44&convoId=3&content=Over%20Here!
+##### HTTP Request:
+	esAPI/?action=Message_Send&userId=44&convoId=3&content=Over%20Here!
 
-	MySQL Query that esAPI prepares dynamically:
-		INSERT INTO Message ( user_id, content, convo_id ) VALUES ( ?, ?, ? )
-	
-	The values submitted for 'convoId' and 'content', and the value of $_SESSION['userId'], are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.
-	[placeholderValues] => Array (
-		[0] => 44
-		[1] => Over Here!
-		[2] => 3
-	)
+##### MySQL Query that esAPI prepares dynamically:
+	INSERT INTO Message ( user_id, content, convo_id ) VALUES ( ?, ?, ? )
 
+##### Placeholder Values
+*The values submitted for 'convoId' and 'content', and the value of $_SESSION['userId'], are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.*
+```php
+[placeholderValues] => Array (
+	[0] => 44
+	[1] => Over Here!
+	[2] => 3
+)
+```
 
-	How to define this route in routes.json:
-	"Message_Send": {
-		"insert": {
-			"Message.user_id"  : "+userId",
-			"Message.content"  : "_content",
-			"Message.convo_id" : "_convoId"
-		}
-	},
+##### How to define this route in routes.json:
+```json
+"Message_Send": {
+	"insert": {
+		"Message.user_id"  : "+userId",
+		"Message.content"  : "_content",
+		"Message.convo_id" : "_convoId"
+	}
+}
+```
 
+#### UPDATE routes modify row(s) in the database.
+> This section coming soon!
 
-### UPDATE routes modify row(s) in the database.
-	
-	This section coming soon!
+#### DELETE routes delete row(s) from the database.
 
-### DELETE routes delete row(s) from the database.
+##### HTTP Request:
+> esAPI/?action=Message_Delete&messageId=123
 
-	HTTP Request:
-		esAPI/?action=Message_Delete&messageId=123
+##### MySQL Query that esAPI prepares dynamically:
+```sql
+DELETE FROM Message WHERE message_id = ?
+```
 
-	MySQL Query that esAPI prepares dynamically:
-		DELETE FROM Message WHERE message_id = ?
-	
-	[placeholderValues] => Array (
-		[0] => 123
-	)
+##### Placeholder values 
+```php	
+[placeholderValues] => Array (
+	[0] => 123
+)
+```
 
-	How to define this route in routes.json:
-		"Message_Delete": {
-			"delete": "Message",
-			"where" : {
-				"Message.message_id": "_messageId"
-			}
-		},
+How to define this route in routes.json:
+```json
+"Message_Delete": {
+	"delete": "Message",
+	"where" : {
+		"Message.message_id": "_messageId"
+	}
+}
+```
