@@ -6,31 +6,41 @@ Makes creating new APIs fast, simple, and secure, by dynamically preparing SQL s
 Here's how to get started:
 
 1. Clone the esAPI repo, and put it on your PHP/MySQL webserver.
-> git clone git@github.com:willcodeforfood/esAPI.git
+```bash
+git clone git@github.com:willcodeforfood/esAPI.git
+```
 
 2. Edit the 'esDB.conf.php' file, to put in your database connection info.
-> vim esAPI/esDB.conf.php
+```bash
+vim esAPI/esDB.conf.php
+```
 
-3. Edit routes.json to create the 'routes' that make up your application!
-> vim esAPI/routes.json
+3. Edit routes.json to create the 'routes' that make up your application!..
+```bash
+vim esAPI/routes.json
+```
 
-4. Tail your error_log, to see debugging information.
-> touch esAPI/error_log && chmod 0777 esAPI/error_log && tail -f esAPI/error_log
+**Tail your error_log, to see debugging information**
+```bash
+touch esAPI/error_log
+chmod 0777 esAPI/error_log
+tail -f esAPI/error_log
+```
 
 Examples
 ===
 
-### SELECT routes fetch specific fields/columns from your database.
+### *SELECT* routes fetch specific fields/columns from your database.
 
-##### HTTP Request:
+##### HTTP Request..
 > /esAPI/?action=Message_GetNew&messageId=150&convoId=3
 
-##### Response:
+##### Response..
 ```json
 {"ok":true,"result":[{"Message.message_id":159,"Message.content":"Anyone in here?","Message.user_id":40,"User.name":"Gohan","Message.time":1396279063}]}
 ```
 
-##### How to define this route in routes.json:
+##### How to define this route in routes.json..
 ```json
 "Message_GetNew" : {
 	"select" : "Message",
@@ -51,7 +61,7 @@ Examples
 }
 ```
 
-##### MySQL Query that esAPI prepares dynamically:
+##### MySQL Query that esAPI prepares dynamically..
 ```sql
 SELECT
 	Message.message_id, Message.content, Message.user_id,
@@ -61,7 +71,7 @@ FROM Message
 WHERE Message.convo_id = ? AND Message.message_id > ?
 ```
 
-##### The values submitted for 'convoId' and 'messageId' are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.
+##### Placeholder Values..
 ```php
 [placeholderValues] => Array (
 	[0] => 3
@@ -70,15 +80,15 @@ WHERE Message.convo_id = ? AND Message.message_id > ?
 ```
 
 
-### INSERT routes create new rows in the database.
+### *INSERT* routes create new rows in the database
 	
-##### HTTP Request:
+##### HTTP Request..
 	esAPI/?action=Message_Send&userId=44&convoId=3&content=Over%20Here!
 
-##### MySQL Query that esAPI prepares dynamically:
+##### MySQL Query that esAPI prepares dynamically..
 	INSERT INTO Message ( user_id, content, convo_id ) VALUES ( ?, ?, ? )
 
-##### Placeholder Values
+##### Placeholder Values..
 *The values submitted for 'convoId' and 'content', and the value of $_SESSION['userId'], are passed to MySQL AFTER preparing the query, to prevent SQL injection attacks.*
 ```php
 [placeholderValues] => Array (
@@ -88,7 +98,7 @@ WHERE Message.convo_id = ? AND Message.message_id > ?
 )
 ```
 
-##### How to define this route in routes.json:
+##### How to define this route in routes.json..
 ```json
 "Message_Send": {
 	"insert": {
@@ -99,27 +109,27 @@ WHERE Message.convo_id = ? AND Message.message_id > ?
 }
 ```
 
-#### UPDATE routes modify row(s) in the database.
+#### UPDATE routes modify row(s) in the database
 > This section coming soon!
 
-#### DELETE routes delete row(s) from the database.
+#### *DELETE* routes delete row(s) from the database.
 
-##### HTTP Request:
+##### HTTP Request..
 > esAPI/?action=Message_Delete&messageId=123
 
-##### MySQL Query that esAPI prepares dynamically:
+##### MySQL Query that esAPI prepares dynamically..
 ```sql
 DELETE FROM Message WHERE message_id = ?
 ```
 
-##### Placeholder values 
+##### Placeholder values..
 ```php	
 [placeholderValues] => Array (
 	[0] => 123
 )
 ```
 
-How to define this route in routes.json:
+How to define this route in routes.json..
 ```json
 "Message_Delete": {
 	"delete": "Message",
