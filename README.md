@@ -205,12 +205,13 @@ DELETE FROM Message WHERE message_id = ?
 ---
 
 ### Request parameter substitution prefixes
-
+```
 '_' : Required field
 '&' : Not required, assumed to be blank if undefined
 '#' : Not required, excluded from query if undefined
 '+' : Substitutes $_SESSION[ $valueKey ], or blank if undefined
 '>' : Only for WHERE clauses -- Greater Than $_REQUEST[ $valueKey ]
 '<' : Only for WHERE clauses -- Less than $_REQUEST[ $valueKey ]
+```
 
 *If the value is NOT prefixed by any of these characters, the value itself will be plugged into the query.*
