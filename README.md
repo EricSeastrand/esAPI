@@ -1,27 +1,25 @@
 esAPI
 =====
 
-Makes creating new APIs fast, simple, and secure, by dynamically preparing SQL statements, based on GET/POST parameters. 
+Makes creating new APIs fast, simple, and secure, by dynamically preparing SQL statements, based on GET/POST parameters. Get started in 3 easy steps!
 
-Here's how to get started:
-
-1. Clone the esAPI repo, and put it on your PHP/MySQL webserver.
+**Clone** the *esAPI* repo.
 ```bash
 git clone git@github.com:willcodeforfood/esAPI.git
 ```
 
-2. Edit the 'esDB.conf.php' file, to put in your database connection info.
+**Configure** your database connection info
 ```bash
 vim esAPI/esDB.conf.php
 ```
 
-3. Edit routes.json to create the 'routes' that make up your application!..
+**Create** your application by defining *routes* in routes.json
 ```bash
 vim esAPI/routes.json
 ```
 
 **Tail your error_log, to see debugging information**
-```bash
+ ```bash
 touch esAPI/error_log
 chmod 0777 esAPI/error_log
 tail -f esAPI/error_log
@@ -37,7 +35,16 @@ Examples
 
 ##### Response..
 ```json
-{"ok":true,"result":[{"Message.message_id":159,"Message.content":"Anyone in here?","Message.user_id":40,"User.name":"Gohan","Message.time":1396279063}]}
+{
+	"ok":true,
+	"result":[{
+		"Message.message_id":159,
+		"Message.content":"Anyone in here?",
+		"Message.user_id":40,
+		"User.name":"Gohan",
+		"Message.time":1396279063
+	}]
+}
 ```
 
 ##### How to define this route in routes.json..
